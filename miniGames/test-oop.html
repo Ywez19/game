@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Batu-Gunting-Kertas</title>
+    <style>
+      .summary {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        margin: 2rem auto;
+        border: 3px solid blanchedalmond;
+        width: 400px;
+        height: 400px;
+        text-align: center;
+      }
+
+      .game-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .choices {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+      }
+
+      .choice {
+        cursor: pointer;
+        margin: 0 10px;
+        padding: 10px;
+        border: 1px solid #000;
+      }
+
+      .result {
+        text-align: center;
+        font-size: 24px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <div class="summary">
+        <h1 class="title">MATCH RESULT</h1>
+        <br />
+        <h1 id="inGame"></h1>
+        <div class="result">
+          <p id="resultText"></p>
+          <p id="scoreText">Score</p>
+        </div>
+      </div>
+      <div class="game-container">
+        <div>
+          <h1>Batu-Gunting-Kertas</h1>
+
+          <div class="choices">
+            <div class="choice" onclick="playGame('✊')">✊</div>
+            <div class="choice" onclick="playGame('✌')">✌</div>
+            <div class="choice" onclick="playGame('🖐')">🖐</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      class Game {
+        constructor() {
+          this.score = 0;
+          this.choices = ["✊", "✌", "🖐"];
+        }
+
+        play(playerChoice) {
+          const computerChoice = this.getComputerChoice();
+          setTimeout(() => {
+            this.displayInGame(`${playerChoice} VS ${computerChoice}`);
+            const result = this.matchResult(playerChoice, computerChoice);
+            this.displayResult(result);
+            this.updateScore(result);
+            this.displayScore();
+          }, 1500);
+        }
+
+        getComputerChoice() {
+          const randomIndex = Math.floor(Math.random() * this.choices.length);
+          return this.choices[randomIndex];
+        }
+
+        matchResult(playerChoice, computerChoice) {
+          if (playerChoice === computerChoice) {
+            return "Draw";
+          } else if (
+            (playerChoice === "✊" && computerChoice === "✌") ||
+            (playerChoice === "✌" && computerChoice === "🖐") ||
+            (playerChoice === "🖐" && computerChoice === "✊")
+          ) {
+            return "You win";
+          } else {
+            return "You lose";
+          }
+        }
+
+        updateScore(result) {
+          if (result === "You win") {
+            this.score++;
+          } else if (result === "You lose") {
+            this.score--;
+          }
+        }
+
+        displayInGame(text) {
+          const inGame = document.getElementById("inGame");
+          inGame.textContent = text;
+        }
+
+        displayResult(result) {
+          const resultText = document.getElementById("resultText");
+          resultText.textContent = result;
+        }
+
+        displayScore() {
+          const scoreText = document.getElementById("scoreText");
+          scoreText.textContent = `Score: ${this.score}`;
+        }
+      }
+
+      const game = new Game();
+
+      function playGame(playerChoice) {
+        game.play(playerChoice);
+      }
+    </script>
+  </body>
+</html>
